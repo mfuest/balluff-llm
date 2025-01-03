@@ -1,0 +1,82 @@
+[
+    {
+        "context": "Product: What functions does the BCM0003 offer compared to the BCM0004?",
+        "prompt": "What functions does the BCM0003 offer compared to the BCM0004?",
+        "response": "Functions BCM0003: Vibration analysis in the time range, vibration analysis in the frequency range, speed input, contact temperature monitoring; \nFunctions BCM0004: Vibration analysis in the time range, contact temperature monitoring"
+    },
+    {
+        "context": "Product: What does it mean when the BCM flashes red every second?",
+        "prompt": "What does it mean when the BCM flashes red every second?",
+        "response": "Red flashing 1 Hz: Teach-in mode active"
+    },
+    {
+        "context": "Product: What conditions are suitable for attaching the BCM with a magnet?",
+        "prompt": "What conditions are suitable for attaching the BCM with a magnet?",
+        "response": "The sensor is screwed onto a magnetic holder and can thus be attached to ferromagnetic mounting surfaces, e.g. for temporary installations or if it is not possible or desirable to drill holes in the machine. The magnetic attachment can  lead to limitations in the measuring accuracy and the usable upper frequency range."
+    },
+    {
+        "context": "Product: What is the pin assignment of the BCM connector?",
+        "prompt": "What is the pin assignment of the BCM connector?",
+        "response": "1 L+ (operating voltage +, SIO\u00a010\u202630\u00a0V, IO-Link 18\u202630\u00a0V)\n2 I/Q (digital input / digital output)\n3 L\u2212 (operating voltage \u2212)\n4 C/Q (IO-Link communication / digital output in SIO mode)"
+    },
+    {
+        "context": "Product: Can I use the BIS M-408-045-001-07-S4 in the USA?",
+        "prompt": "Can I use the BIS M-408-045-001-07-S4 in the USA?",
+        "response": "Yes, you can use the BIS M-408-045-001-07-S4 in the USA. This product has the necessary approvals and conformity certifications, including CE and UL-FILE E227256, which are recognized in the USA ."
+    },
+    {
+        "context": "Product: What is the minimum distance between two BIS M-408-045-001-07-S4 Read/Write Devices?",
+        "prompt": "What is the minimum distance between two BIS M-408-045-001-07-S4 Read/Write Devices?",
+        "response": "The minimum distance between two BIS M-408-045-001-07-S4 Read/Write Devices is 80 mm"
+    },
+    {
+        "context": "Product: What is the functional principle of the BIS M-408-045-001-07-S4?",
+        "prompt": "What is the functional principle of the BIS M-408-045-001-07-S4?",
+        "response": "The functional principle of the BIS M-408-045-001-07-S4 is based on non-contact read/write technology. This system includes an evaluation electronic device and a permanently connected read/write head. It is used for programming and reading information on data carriers. Data and current status messages are transmitted from the identification system to the host system via a defined dialogue protocol. This dialogue protocol can also be used to transmit other commands to the read/write head, such as commands to switch off the read head antenna\nThe main components of the BIS M identification system are:\n\u2013 Read/write device: Manages data transmission between the read/write head and the data carrierss.\n\u2013 Data carrier:  Autonomous units that receive power from the read/write head and can perform static read operations once they receive the carrier wave signal"
+    },
+    {
+        "context": "Product: How is data integrity ensured with a BIS M-408-045-001-07-S4?",
+        "prompt": "How is data integrity ensured with a BIS M-408-045-001-07-S4?",
+        "response": "Data integrity with the BIS M-408-045-001-07-S4 is ensured through the use of a CRC_16 data check. This method involves writing a checksum to the data carrier, which allows the data to be checked for validity at any time. The CRC_16 data check provides very high data integrity, even during the non-active phase when the data carrier is outside the read/write head"
+    },
+    {
+        "context": "Product: What kind of power cable do I need to operate a BNI EIP-507-005-Z040?",
+        "prompt": "What kind of power cable do I need to operate a BNI EIP-507-005-Z040?",
+        "response": "To operate a BNI EIP-507-005-Z040, you need a power cable with the following specifications:\nConnector Type: 7/8\" external thread\nPoles: 4-pole"
+    },
+    {
+        "context": "Product: Can I use the BNI EIP-507-005-Z040 in applications with ambient temperatures of 80\u00b0C?",
+        "prompt": "Can I use the BNI EIP-507-005-Z040 in applications with ambient temperatures of 80\u00b0C?",
+        "response": "No, you cannot use the BNI EIP-507-005-Z040 in applications with ambient temperatures of 80\u00b0C. The specified ambient temperature range for this device is -40\u00b0C to 70\u00b0C"
+    },
+    {
+        "context": "Product: What is the factory IP adress of the BNI EIP-507-005-Z040?",
+        "prompt": "What is the factory IP adress of the BNI EIP-507-005-Z040?",
+        "response": "The factory IP address of the BNI EIP-507-005-Z040 is 192.168.1.1\u00a0"
+    },
+    {
+        "context": "Product: How does the BNI EIP-507-005-Z040 allocate the byte stream of the configuration data?",
+        "prompt": "How does the BNI EIP-507-005-Z040 allocate the byte stream of the configuration data?",
+        "response": "The BNI EIP-507-005-Z040 allocates the byte stream of the configuration data as follows:\nByte 0-1: General configuration for the entire module\nByte 2-25: Configuration of IO-Link port 0\nByte 26-49: Configuration of IO-Link port 1\nByte 50-73: Configuration of IO-Link port 2\nByte 74-97: Configuration of IO-Link port 3\n\nThese bytes are used to set up the module and its IO-Link ports, ensuring proper communication and functionality within the network."
+    },
+    {
+        "context": "Product: What does it mean when the status LED US flashes red on a BNI XG5-508-0B5-R067?",
+        "prompt": "What does it mean when the status LED US flashes red on a BNI XG5-508-0B5-R067?",
+        "response": "When the status LED US flashes red on a BNI XG5-508-0B5-R067, it indicates that the sensor supply voltage is less than 18V"
+    },
+    {
+        "context": "Product: Which protocols can a BNI XG5-508-0B5-R067 communicate with?",
+        "prompt": "Which protocols can a BNI XG5-508-0B5-R067 communicate with?",
+        "response": "The BNI XG5-508-0B5-R067 can communicate with the following protocols:\nProfinet\nEthernet IP\nEtherCAT\nREST API\nMQTT (for IIoT interfaces)"
+    },
+    {
+        "context": "Product: What is the difference between the two BVS cameras BVS01ZE and BVS01ZF?",
+        "prompt": "What is the difference between the two BVS cameras BVS01ZE and BVS01ZF?",
+        "response": "The main differences between the BVS01ZE and BVS01ZF cameras are as follows:\nBVS01ZE:\nProduct Name: BVS VS-M1280CF1-L3-000\nLight Source: Infrared (IR) light\nCommunication Interface: IO-Link\n\nBVS01ZF:\nProduct Name: BVS VS-M1280BF1-MB-000\nLight Source: White/Red (W/R) light\nCommunication Interface: Multi-fieldbus\n\nIn summary, the BVS01ZE uses IR light and communicates via IO-Link, while the BVS01ZF uses W/R light and supports multi-fieldbus communication."
+    },
+    {
+        "context": "Product: What do I have to do to establish a connection with the BVS camera BVS01ZE?",
+        "prompt": "What do I have to do to establish a connection with the BVS camera BVS01ZE?",
+        "response": "To establish a connection with the BVS camera BVS01ZE, follow these steps:\n1. Connect the Sensor:\nConnect the sensor via IIoT or XF2/IIOT port with the network.\nConnect the power supply to the Power port with a 24 V power supply.\nThe sensor will start up and be operational after approximately 100 seconds 1 .\n\n2. Network Configuration:\nDepending on the network topology, different network settings must be made. In a company network or production facility, IP addresses are generally fixed.\nIf the sensor and PC are in the same subnet of a local network and no DHCP server is available for automatic IP assignment, the IP addresses of the PC and sensor must be matched and manually set.\nIf the sensor and PC are connected directly via a LAN cable, both devices will be assigned with LLA/Zeroconf IP addresses 169.254.x.x automatically. The PC needs to be set to \"Obtain IP addresses automatically\".\nIf the sensor and PC are in the same subnet of a local network and a DHCP server is available for automatic IP assignment, IP addresses are set automatically.\nIf the sensor and PC are in different subnets of a local network, communication with the sensor is still possible through switches 1 .\n\n3. Access the Sensor:\nOpen a web browser.\nEnter the following URL:\nhttp://192.168.10.2/\nConfirm the entry to access the sensor's configuration interface 1\n\nExecute Auto Setup (Optional):\nPress the Auto Setup button for at least 2 and up to 4 seconds.\nPosition the sensor using the red light beam to point to the target object.\nFix the sensor and press the Auto Setup button to confirm the positioning.\nThe sensor will automatically set the brightness and focus, which will take up to 20 seconds 1 .\n\nBy following these steps, you will establish a connection with the BVS camera BVS01ZE and be able to configure it for your application."
+    }
+]
