@@ -1,93 +1,107 @@
-# Balluff LLM
+# Balluff-LLM: Fine-Tuning LLMs for Edge Deployment
+
+## Overview
+This project explores the **fine-tuning and deployment of Large Language Models (LLMs) on resource-constrained edge devices**, specifically **Raspberry Pi 5 (4GB & 8GB RAM)**, for **industrial applications at Balluff**. 
+
+We fine-tuned **TinyLlama**, a lightweight model, using **Low-Rank Adaptation (LoRA)** to optimize it for **on-device inference**. The primary goal was to **enable privacy-preserving LLM deployments** without relying on cloud services, making it viable for **industrial environments with strict data regulations**.
+
+## Features
+- ✅ **Fine-tuning**: Applied **LoRA-based PEFT** to efficiently adapt TinyLlama with minimal resources.
+- ✅ **Quantization**: Optimized the model for edge deployment using **BitsAndBytes**.
+- ✅ **Raspberry Pi 5 Deployment**: Evaluated feasibility on both **4GB and 8GB** versions.
+- ✅ **Industrial Use Case**: Trained on **Balluff product-specific data** for real-world industrial applications.
+- ✅ **Performance Evaluations**: Benchmarked response speed, accuracy, and feasibility.
+
+---
+
+## Project Structure
+
+📦 balluff-llm
+┣ 📂 4GB_rpi5_LLM/      # TinyLlama fine-tuned model & checkpoints
+┣ 📂 data/              # Preprocessed Balluff product data
+┣ 📜 RAG.ipynb          # Alternative RAG-based approach (not used in final version)
+┣ 📜 README.md          # This file
+┣ 📜 .gitignore         # Git ignore rules
+┗ 📜 Data_Balluff.xlsx  # Sample dataset (if applicable)
+
+---
+
+## 🛠️ Installation & Setup
+### **1️⃣ Clone the Repository**
+```bash
+git clone https://github.com/mfuest/balluff-llm.git
+cd balluff-llm
+
+2️⃣ Install Dependencies
+
+pip install -r requirements.txt
+
+3️⃣ Run the Model on Raspberry Pi
+
+python run_model.py --model_path 4GB_rpi5_LLM/tinyllama-finetuned-mps/
 
 
 
-## Getting started
+⸻
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+🏗️ Fine-Tuning Process
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Model Selection
 
-## Add your files
+We initially tested Mistral 7B and TinyLlama, but due to memory constraints on Raspberry Pi 5, we focused on TinyLlama.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Data Preprocessing
+	•	Extracted Balluff product data (PDF datasheets)
+	•	Converted to structured context-prompt-response format
+	•	Cleaned and normalized data using ChatGPT-assisted preprocessing
 
-```
-cd existing_repo
-git remote add origin https://gitlab.db.in.tum.de/yx/balluff-llm.git
-git branch -M main
-git push -uf origin main
-```
+Fine-Tuning Approach
+	•	LoRA (Low-Rank Adaptation) for parameter-efficient fine-tuning
+	•	Training performed on Google Colab (A100, T4 GPUs)
+	•	Final model uploaded to Hugging Face: Final Model
 
-## Integrate with your tools
+⸻
 
-- [ ] [Set up project integrations](https://gitlab.db.in.tum.de/yx/balluff-llm/-/settings/integrations)
+🏁 Results & Performance
+	•	Response Speed: ~13 tokens/sec
+	•	Validation Accuracy: ~75% correct responses on industrial test cases
+	•	Memory Usage: 2.2GB fine-tuned model (fits within Raspberry Pi 5 constraints)
+	•	Trade-offs: LLM struggles with numerical data consistency (e.g., IP addresses)
 
-## Collaborate with your team
+⸻
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+🔄 Alternative Approaches: Retrieval-Augmented Generation (RAG)
 
-## Test and Deploy
+We also explored RAG (Retrieval-Augmented Generation) but found:
+	•	Faster inference (~49 tokens/sec)
+	•	Lower accuracy (0% correct responses in test cases)
+	•	Higher adaptability (no fine-tuning required)
 
-Use the built-in continuous integration in GitLab.
+Ultimately, we chose fine-tuning over RAG due to better domain-specific accuracy.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+⸻
 
-***
+📌 Limitations & Future Work
+	•	🚧 Data Augmentation: More training data could improve accuracy
+	•	🚧 Model Compression: Further quantization to reduce RAM footprint
+	•	🚧 Hybrid Approach: Combining RAG + fine-tuning for dynamic queries
+	•	🚧 Multi-device Optimization: Scaling to other edge devices beyond Raspberry Pi
 
-# Editing this README
+⸻
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+👨‍💻 Contributors
+	•	Maximilian Fuest – Raspberry Pi LLM testing, fine-tuning code, report writing
+	•	Yufei Xu – RAG implementation, evaluation, report writing
+	•	Yusuf A. Gün – Data preprocessing, fine-tuning, model training, validation
 
-## Suggestions for a good README
+⸻
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+📜 References
+	•	TUM x Balluff AI Project Report
+	•	Fine-Tuned Model on Hugging Face
+### **Next Steps**
+✅ **Copy this `README.md` to your GitHub repo**  
+✅ **Update any missing details (e.g., dataset access, additional dependencies)**  
+✅ **Add installation & usage details based on your actual code structure**  
 
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Let me know if you'd like any modifications! 🚀
