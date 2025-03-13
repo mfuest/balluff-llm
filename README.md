@@ -1,107 +1,122 @@
-# Balluff-LLM: Fine-Tuning LLMs for Edge Deployment
+You’re right! Here’s the properly formatted README.md with correct code blocks, bullet points, and structure for a clean and professional presentation.
+
+⸻
+
+README.md
+
+# Edge-Optimized LLM Fine-Tuning and Deployment
 
 ## Overview
-This project explores the **fine-tuning and deployment of Large Language Models (LLMs) on resource-constrained edge devices**, specifically **Raspberry Pi 5 (4GB & 8GB RAM)**, for **industrial applications at Balluff**. 
+This repository contains the code and data for fine-tuning a lightweight Large Language Model (LLM) for deployment on resource-constrained edge devices. The project focuses on adapting the TinyLlama model using a parameter-efficient fine-tuning technique known as Low-Rank Adaptation (LoRA). The primary objective is to achieve on-device inference without reliance on cloud services, ensuring data privacy and reducing latency in industrial applications.
 
-We fine-tuned **TinyLlama**, a lightweight model, using **Low-Rank Adaptation (LoRA)** to optimize it for **on-device inference**. The primary goal was to **enable privacy-preserving LLM deployments** without relying on cloud services, making it viable for **industrial environments with strict data regulations**.
+---
 
 ## Features
-- ✅ **Fine-tuning**: Applied **LoRA-based PEFT** to efficiently adapt TinyLlama with minimal resources.
-- ✅ **Quantization**: Optimized the model for edge deployment using **BitsAndBytes**.
-- ✅ **Raspberry Pi 5 Deployment**: Evaluated feasibility on both **4GB and 8GB** versions.
-- ✅ **Industrial Use Case**: Trained on **Balluff product-specific data** for real-world industrial applications.
-- ✅ **Performance Evaluations**: Benchmarked response speed, accuracy, and feasibility.
+- **Fine-Tuning with LoRA**: Efficient adaptation of a pre-trained TinyLlama model using PEFT methods.
+- **Quantization for Edge Deployment**: Model quantization reduces memory and computational requirements.
+- **Edge Device Compatibility**: Optimized for low-memory devices (4GB and 8GB RAM).
+- **Structured Training Data**: Preprocessed datasets formatted for fine-tuning.
+- **Performance Evaluation**: Benchmarks include response speed, accuracy, and resource usage.
 
 ---
 
-## Project Structure
+## Repository Structure
 
-📦 balluff-llm
-┣ 📂 4GB_rpi5_LLM/      # TinyLlama fine-tuned model & checkpoints
-┣ 📂 data/              # Preprocessed Balluff product data
-┣ 📜 RAG.ipynb          # Alternative RAG-based approach (not used in final version)
-┣ 📜 README.md          # This file
-┣ 📜 .gitignore         # Git ignore rules
-┗ 📜 Data_Balluff.xlsx  # Sample dataset (if applicable)
+📦 edge-llm-finetuning
+┣ 📂 4GB_edge_device/        # Fine-tuned model files and checkpoints
+┣ 📂 data/                   # Preprocessed training and validation datasets
+┣ 📜 run_model.py            # Script to run inference on the edge device
+┣ 📜 README.md               # This documentation file
+┣ 📜 .gitignore              # Git ignore rules
+┗ 📜 Data_Sample.xlsx        # Example dataset file
 
 ---
 
-## 🛠️ Installation & Setup
-### **1️⃣ Clone the Repository**
+## Installation & Setup
+
+### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/mfuest/balluff-llm.git
-cd balluff-llm
+git clone https://github.com/mfuest/edge-llm-finetuning.git
+cd edge-llm-finetuning
 
 2️⃣ Install Dependencies
 
+Ensure you have Python 3.8 or higher, then install the required packages:
+
 pip install -r requirements.txt
 
-3️⃣ Run the Model on Raspberry Pi
+3️⃣ Running the Model on an Edge Device
 
-python run_model.py --model_path 4GB_rpi5_LLM/tinyllama-finetuned-mps/
+Execute the following command to run the model:
+
+python run_model.py --model_path 4GB_edge_device/tinyllama-finetuned/
 
 
 
 ⸻
 
-🏗️ Fine-Tuning Process
+Fine-Tuning Process
 
 Model Selection
 
-We initially tested Mistral 7B and TinyLlama, but due to memory constraints on Raspberry Pi 5, we focused on TinyLlama.
+Initial experiments evaluated several models under strict memory constraints. Due to the limited resources of edge devices, the TinyLlama model was selected as the best candidate for fine-tuning.
 
 Data Preprocessing
-	•	Extracted Balluff product data (PDF datasheets)
-	•	Converted to structured context-prompt-response format
-	•	Cleaned and normalized data using ChatGPT-assisted preprocessing
+	•	Data Extraction: Text and tabular data were extracted from various documentation sources.
+	•	Normalization: Data were cleaned and converted into a structured context-prompt-response format.
+	•	Formatting: The dataset was prepared according to the model’s expected input template.
 
-Fine-Tuning Approach
-	•	LoRA (Low-Rank Adaptation) for parameter-efficient fine-tuning
-	•	Training performed on Google Colab (A100, T4 GPUs)
-	•	Final model uploaded to Hugging Face: Final Model
-
-⸻
-
-🏁 Results & Performance
-	•	Response Speed: ~13 tokens/sec
-	•	Validation Accuracy: ~75% correct responses on industrial test cases
-	•	Memory Usage: 2.2GB fine-tuned model (fits within Raspberry Pi 5 constraints)
-	•	Trade-offs: LLM struggles with numerical data consistency (e.g., IP addresses)
+Fine-Tuning Implementation
+	•	Methodology: The fine-tuning utilizes LoRA for parameter-efficient adaptation.
+	•	Training Environment: Conducted on cloud-based GPU resources.
+	•	Model Deployment: The final model was quantized and validated for efficient deployment.
 
 ⸻
 
-🔄 Alternative Approaches: Retrieval-Augmented Generation (RAG)
-
-We also explored RAG (Retrieval-Augmented Generation) but found:
-	•	Faster inference (~49 tokens/sec)
-	•	Lower accuracy (0% correct responses in test cases)
-	•	Higher adaptability (no fine-tuning required)
-
-Ultimately, we chose fine-tuning over RAG due to better domain-specific accuracy.
+Performance and Evaluation
+	•	Inference Speed: The fine-tuned model processes an average of ~13 tokens per second.
+	•	Validation Accuracy: Approximately 75% of domain-specific queries return correct responses.
+	•	Resource Usage: The quantized model requires ~2.2GB of storage, fitting within the constraints of typical low-memory edge devices.
 
 ⸻
 
-📌 Limitations & Future Work
-	•	🚧 Data Augmentation: More training data could improve accuracy
-	•	🚧 Model Compression: Further quantization to reduce RAM footprint
-	•	🚧 Hybrid Approach: Combining RAG + fine-tuning for dynamic queries
-	•	🚧 Multi-device Optimization: Scaling to other edge devices beyond Raspberry Pi
+Alternative Approaches
+
+An alternative approach using Retrieval-Augmented Generation (RAG) was explored. While RAG offered faster inference speeds, it resulted in lower accuracy on domain-specific queries. Consequently, fine-tuning was chosen as the preferred approach.
 
 ⸻
 
-👨‍💻 Contributors
-	•	Maximilian Fuest – Raspberry Pi LLM testing, fine-tuning code, report writing
-	•	Yufei Xu – RAG implementation, evaluation, report writing
-	•	Yusuf A. Gün – Data preprocessing, fine-tuning, model training, validation
+Limitations and Future Work
+	•	Data Augmentation: Expanding and diversifying the training dataset could further improve performance.
+	•	Model Compression: Additional quantization or pruning techniques may reduce memory usage further.
+	•	Hybrid Strategies: Combining fine-tuning with retrieval-based methods might enhance adaptability without retraining.
+	•	Scalability: Future work will investigate optimizing for a broader range of edge devices.
 
 ⸻
 
-📜 References
-	•	TUM x Balluff AI Project Report
-	•	Fine-Tuned Model on Hugging Face
-### **Next Steps**
-✅ **Copy this `README.md` to your GitHub repo**  
-✅ **Update any missing details (e.g., dataset access, additional dependencies)**  
-✅ **Add installation & usage details based on your actual code structure**  
+Contributors
+	•	Maximilian Fuest – Edge device testing, fine-tuning implementation, technical documentation.
+	•	Yufei Xu – Implementation of alternative methods and evaluation.
+	•	Yusuf A. Gün – Data preprocessing, model training, validation, and performance analysis.
 
-Let me know if you'd like any modifications! 🚀
+⸻
+
+References
+	•	📄 Project Report (PDF)
+	•	🔗 Fine-Tuned Model on Hugging Face
+
+⸻
+
+License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+⸻
+
+Contributing
+
+Contributions are welcome!
+To contribute:
+	1.	Fork the repository
+	2.	Submit a pull request with improvements
+	3.	Open an issue for bug reports or feature requests
