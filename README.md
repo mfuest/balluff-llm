@@ -1,7 +1,7 @@
 # Edge-Optimized LLM Fine-Tuning and Deployment
 
 ## Overview
-This repository contains the code and data for fine-tuning a lightweight Large Language Model (LLM) for deployment on resource-constrained edge devices. The project focuses on adapting the **TinyLlama** model using **Low-Rank Adaptation (LoRA)** for parameter-efficient fine-tuning. The primary objective is to achieve **local inference** while ensuring **data privacy** and **low-latency responses** without reliance on cloud services.
+This repository contains the code and data for fine-tuning a lightweight Large Language Model (LLM) for deployment on resource-constrained edge devices. The project focuses on adapting the **TinyLlama** model using **Low-Rank Adaptation (LoRA)** for parameter-efficient fine-tuning. The primary objective is to achieve **local inference on RPi5s with 4/8GB RAM** while ensuring **data privacy** and **low-latency responses** without reliance on cloud services.
 
 ---
 
