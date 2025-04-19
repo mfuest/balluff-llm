@@ -1,82 +1,107 @@
-# Edge-Optimized LLM for Local Inference
+# Balluff LLM - Fine-tuned TinyLlama
 
-A lightweight, fine-tuned Large Language Model (LLM) optimized for deployment on resource-constrained edge devices. This project uses **TinyLlama** fine-tuned with **Low-Rank Adaptation (LoRA)** to enable local inference while ensuring data privacy and low-latency responses. The Model was built for answering product related questions about BALLUFF Sensors.
+A lightweight, fine-tuned model for answering questions about Balluff sensors and industrial automation products. This project uses the TinyLlama 1.1B base model with LoRA fine-tuning for efficient adaptation to the industrial automation domain.
 
-## Quick Start
+## Performance Overview
+
+The fine-tuned model shows significant improvements over the base model:
+
+| Model | Accuracy on Validation Set | Strong Performance Areas |
+|-------|----------------------------|--------------------------|
+| TinyLlama 1.1B (base) | 18.75% | General knowledge questions |
+| Balluff-sensors (fine-tuned) | 37.50% | Product specifications, temperature ranges, distances, IP addresses |
+
+## Quick Start with Ollama
 
 ### Prerequisites
-- Python 3.8 or higher
-- At least 4GB RAM (for edge devices)
+- [Ollama](https://ollama.ai/download) installed
+- 4GB RAM minimum for inference
 
-### Installation
-1. Clone the repository:
+### Running Inference
 ```bash
-git clone https://github.com/mfuest/balluff-llm.git
-cd balluff-llm
+# Pull and run the model
+ollama run balluff-sensors
+
+# Or use the API
+curl -X POST http://localhost:11434/api/generate -d '{
+  "model": "balluff-sensors",
+  "prompt": "What sensors does Balluff offer for level detection?"
+}'
 ```
 
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
+## Example Queries
+
+```
+> What is the minimum distance between two BIS M-408-045-001-07-S4 Read/Write Devices?
+> What is the factory IP address of the BNI EIP-507-005-Z040?
+> Can I use the BNI EIP-507-005-Z040 in applications with ambient temperatures of 80°C?
+> What does it mean when the status LED US flashes red on a BNI XG5-508-0B5-R067?
 ```
 
-### Running the Model
-To run inference on your device:
+## Advanced Usage
+
+### Creating Your Own Model
+
+If you have the fine-tuned LoRA weights, you can create your own Ollama model:
+
+1. Merge LoRA weights with base model:
 ```bash
-python src/model/run_model.py --model_path models/tinyllama-finetuned/
+python merge_lora.py \
+  --adapter_path models/tinyllama-finetuned \
+  --output_dir models/tinyllama-merged \
+  --base_model TinyLlama/TinyLlama-1.1B-Chat-v1.0
+```
+
+2. Create Ollama model:
+```bash
+python convert_to_ollama.py --model_path models/tinyllama-merged --name balluff-sensors
+ollama create balluff-sensors -f Modelfile
+```
+
+### Fine-tuning Your Own Version
+
+For best results with LoRA fine-tuning, we recommend:
+```bash
+python finetune_lora.py \
+  --base_model TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
+  --dataset your-balluff-data \
+  --lora_r 8 \
+  --lora_alpha 16 \
+  --lora_dropout 0.1 \
+  --learning_rate 5e-5 \
+  --weight_decay 0.001 \
+  --num_train_epochs 5
 ```
 
 ## Project Structure
 ```
 📦 balluff-llm
-├── 📂 src/                      # Source code
-│   ├── 📂 model/               # Model-related code
-│   │   └── 📜 run_model.py     # Inference script
-│   ├── 📂 data/                # Data processing code
-│   └── 📂 utils/               # Utility functions
-├── 📂 models/                   # Model files
-│   └── 📂 tinyllama-finetuned/ # Fine-tuned model
-├── 📂 data/                     # Data directory
-│   ├── 📜 Data_Balluff.xlsx    # Raw data
-│   └── 📂 processed/           # Processed data
-├── 📂 notebooks/               # Jupyter notebooks
-├── 📂 tests/                   # Test files
-├── 📜 requirements.txt         # Dependencies
-├── 📜 setup.py                 # Package setup
-└── 📜 README.md               # Documentation
+├── 📂 models/                  # Fine-tuned models
+│   ├── 📂 tinyllama-finetuned/ # LoRA adapter weights
+│   └── 📂 tinyllama-merged/    # Merged model (created by merge_lora.py)
+├── 📂 data/                    # Training data
+│   └── 📂 processed/           # Processed training data
+├── 📜 merge_lora.py            # Script to merge LoRA weights with base model
+├── 📜 convert_to_ollama.py     # Script to convert model to Ollama format
+└── 📜 README.md                # This file
 ```
 
-## Model Details
+## Fine-Tuning Process
+- **Technique:** Parameter-Efficient Fine-Tuning (LoRA) via PEFT on a quantized TinyLlama backbone.
+- **Data Preparation:** Balluff product datasheets were cleaned, normalized, and converted into JSON records using the TinyLlama chat template (`<|system|>`, `<|user|>`, `<|assistant|>`).
+- **Training Setup:**
+- **Infrastructure:** Google Colab with NVIDIA A100 and T4 GPUs  
+- **Split:** ~90 % train / 10 % validation  
+- **Duration & Cost:** 8.47 A100‑GPU h (~1 h 56 m) and 1.66 T4‑GPU h (~3 h 47 m)  
+- **Hyperparameters:** LoRA adapters on attention projections, frozen base weights, low‐rank matrices trained over multiple epochs  
 
-### Performance Characteristics
-- Inference Speed: ~13 tokens per second
-- Memory Usage: ~2.2GB (quantized)
-- Validation Accuracy: ~75% on domain-specific tasks
+## Limitations
 
-### Technical Specifications
-- Base Model: TinyLlama
-- Fine-tuning Method: LoRA (Low-Rank Adaptation)
-- Quantization: Applied for edge deployment
-- Target Devices: Low-memory devices (e.g., Raspberry Pi 5 with 4/8GB RAM)
-
-## Development
-
-### Running Tests
-```bash
-python -m unittest discover tests
-```
-
-### Contributing
-Contributions are welcome! Please:
-1. Fork the repository
-2. Submit a pull request with improvements
-3. Open an issue for bug reports or feature requests
-
-## References
-- 🔗 [Fine-Tuned Model on Hugging Face](https://huggingface.co/YusufGun/Final)
+The current fine-tuned model:
+- Shows improvement (37.50% vs 18.75%) over the base model on validation tests
+- Works best for direct questions about product specifications
+- May provide incorrect information for complex technical questions
+- Requires tuning generation parameters for optimal results (temperature: 0.7, top_p: 0.9)
 
 ## Contributors
 - Maximilian Fuest
-- Yusuf A. Gün
-- Yufei Xu
-
