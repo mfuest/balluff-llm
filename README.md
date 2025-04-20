@@ -89,7 +89,7 @@ python finetune_lora.py \
 ## Fine-Tuning Process
 - **Technique:** Parameter-Efficient Fine-Tuning (LoRA) via PEFT on a quantized TinyLlama backbone.
 - **Data Preparation:** Balluff product datasheets were cleaned, normalized, and converted into JSON records using the TinyLlama chat template (`<|system|>`, `<|user|>`, `<|assistant|>`).
-- **Training Setup:**
+**Training Setup:**
 - **Infrastructure:** Google Colab with NVIDIA A100 and T4 GPUs  
 - **Split:** ~90 % train / 10 % validation  
 - **Duration & Cost:** 8.47 A100‑GPU h (~1 h 56 m) and 1.66 T4‑GPU h (~3 h 47 m)  
