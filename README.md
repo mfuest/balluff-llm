@@ -2,20 +2,43 @@
 
 A lightweight, fine-tuned model for answering questions about Balluff sensors and industrial automation products. This project uses the TinyLlama 1.1B base model with LoRA fine-tuning for efficient adaptation to the industrial automation domain.
 
-## Performance Overview
+## Table of Contents
+1. [Quick Start](#quick-start)
+2. [Project Overview](#project-overview)
+3. [Installation](#installation)
+4. [Development Pipeline](#development-pipeline)
+5. [Project Structure](#project-structure)
+6. [Data Handling](#data-handling)
+7. [Model Performance](#model-performance)
+8. [Contributing](#contributing)
+9. [Limitations](#limitations)
 
-The fine-tuned model shows significant improvements over the base model:
-
-| Model | Accuracy on Validation Set | Strong Performance Areas |
-|-------|----------------------------|--------------------------|
-| TinyLlama 1.1B (base) | 18.75% | General knowledge questions |
-| Balluff-sensors (fine-tuned) | 37.50% | Product specifications, temperature ranges, distances, IP addresses |
-
-## Quick Start with Ollama
+## Quick Start
 
 ### Prerequisites
 - [Ollama](https://ollama.ai/download) installed
 - 4GB RAM minimum for inference
+- Python 3.10 or higher
+- Conda (recommended) or pip
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/balluff-llm.git
+cd balluff-llm
+```
+
+2. Create and activate the conda environment:
+```bash
+conda env create -f environment.yml
+conda activate balluff-llm
+```
+
+Or install with pip:
+```bash
+pip install -r requirements.txt
+```
 
 ### Running Inference
 ```bash
@@ -29,8 +52,11 @@ curl -X POST http://localhost:11434/api/generate -d '{
 }'
 ```
 
-## Example Queries
+## Project Overview
 
+This project aims to create a lightweight language model specifically trained for Balluff product documentation. The model is optimized for edge devices with limited resources (4GB RAM) while maintaining high accuracy on product-specific queries.
+
+### Example Queries
 ```
 > What is the minimum distance between two BIS M-408-045-001-07-S4 Read/Write Devices?
 > What is the factory IP address of the BNI EIP-507-005-Z040?
@@ -38,62 +64,113 @@ curl -X POST http://localhost:11434/api/generate -d '{
 > What does it mean when the status LED US flashes red on a BNI XG5-508-0B5-R067?
 ```
 
-## Advanced Usage
+## Development Pipeline
 
-### Creating Your Own Model
+The project follows a structured development pipeline:
 
-If you have the fine-tuned LoRA weights, you can create your own Ollama model:
+1. **Data Preparation** (`notebooks/data_preparation.ipynb`)
+   - Loads raw Balluff product data
+   - Cleans and normalizes the data
+   - Converts to the TinyLlama chat template format
+   - Splits into train/validation sets
 
-1. Merge LoRA weights with base model:
-```bash
-python merge_lora.py \
-  --adapter_path models/tinyllama-finetuned \
-  --output_dir models/tinyllama-merged \
-  --base_model TinyLlama/TinyLlama-1.1B-Chat-v1.0
-```
+2. **Model Training** (`notebooks/finetuning_framework.ipynb`)
+   - Loads the TinyLlama base model
+   - Applies LoRA fine-tuning
+   - Saves the fine-tuned model
 
-2. Create Ollama model:
-```bash
-python convert_to_ollama.py --model_path models/tinyllama-merged --name balluff-sensors
-ollama create balluff-sensors -f Modelfile
-```
+3. **Model Evaluation** (`notebooks/evaluation.ipynb`)
+   - Measures memory usage and inference speed
+   - Evaluates accuracy on validation set
+   - Assesses response quality
 
-### Fine-tuning Your Own Version
+4. **Edge Deployment** (`edge_inference/quantization.ipynb`)
+   - Quantizes the model for edge devices
+   - Tests inference on Raspberry Pi
+   - Measures performance metrics
 
-For best results with LoRA fine-tuning, we recommend:
-```bash
-python finetune_lora.py \
-  --base_model TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
-  --dataset your-balluff-data \
-  --lora_r 8 \
-  --lora_alpha 16 \
-  --lora_dropout 0.1 \
-  --learning_rate 5e-5 \
-  --weight_decay 0.001 \
-  --num_train_epochs 5
-```
+### Training Process
+- **Technique:** Parameter-Efficient Fine-Tuning (LoRA) via PEFT on a quantized TinyLlama backbone
+- **Infrastructure:** Google Colab with NVIDIA A100 and T4 GPUs
+- **Split:** ~90% train / 10% validation
+- **Duration & Cost:** 8.47 A100-GPU h (~1 h 56 m) and 1.66 T4-GPU h (~3 h 47 m)
+- **Hyperparameters:** 
+  - LoRA adapters on attention projections
+  - Frozen base weights
+  - Low-rank matrices trained over multiple epochs
 
 ## Project Structure
 ```
 📦 balluff-llm
-├── 📂 models/                  # Fine-tuned models
-│   ├── 📂 tinyllama-finetuned/ # LoRA adapter weights
-│   └── 📂 tinyllama-merged/    # Merged model (created by merge_lora.py)
-├── 📂 data/                    # Training data
-│   └── 📂 processed/           # Processed training data
-├── 📜 merge_lora.py            # Script to merge LoRA weights with base model
-├── 📜 convert_to_ollama.py     # Script to convert model to Ollama format
-└── 📜 README.md                # This file
+├── 📂 edge_inference/         # Edge device deployment
+│   └── 📜 quantization.ipynb  # Model quantization for edge
+├── 📂 models/                 # Fine-tuned models
+│   ├── 📂 tinyllama-finetuned/# LoRA adapter weights
+│   └── 📂 tinyllama-merged/   # Merged model
+├── 📂 data/                   # Training data
+│   ├── 📂 raw/               # Raw data (not tracked)
+│   └── 📂 processed/         # Processed training data
+├── 📂 notebooks/             # Jupyter notebooks
+│   ├── 📜 data_preparation.ipynb
+│   ├── 📜 finetuning_framework.ipynb
+│   └── 📜 evaluation.ipynb
+├── 📂 src/                   # Source code
+│   └── 📂 data/             # Data processing scripts
+├── 📂 tests/                 # Test files
+├── 📜 environment.yml        # Conda environment
+├── 📜 requirements.txt       # Pip requirements
+└── 📜 README.md             # This file
 ```
 
-## Fine-Tuning Process
-- **Technique:** Parameter-Efficient Fine-Tuning (LoRA) via PEFT on a quantized TinyLlama backbone.
-- **Data Preparation:** Balluff product datasheets were cleaned, normalized, and converted into JSON records using the TinyLlama chat template (`<|system|>`, `<|user|>`, `<|assistant|>`).
-**Training Setup:**
-- **Infrastructure:** Google Colab with NVIDIA A100 and T4 GPUs  
-- **Split:** ~90 % train / 10 % validation  
-- **Duration & Cost:** 8.47 A100‑GPU h (~1 h 56 m) and 1.66 T4‑GPU h (~3 h 47 m)  
-- **Hyperparameters:** LoRA adapters on attention projections, frozen base weights, low‐rank matrices trained over multiple epochs  
+## Data Handling
+
+### Data Format
+Processed data is stored in JSON format:
+```json
+{
+    "context": "Product information and specifications",
+    "prompt": "User question about the product",
+    "response": "Accurate answer based on specifications"
+}
+```
+
+### Data Processing
+The `src/data/load_data.py` script handles:
+- Loading raw Excel data
+- Cleaning and normalization
+- Converting to training format
+- Splitting into train/validation sets
+
+## Model Performance
+
+The fine-tuned model shows significant improvements:
+
+| Model | Accuracy on Validation Set | Strong Performance Areas |
+|-------|----------------------------|--------------------------|
+| TinyLlama 1.1B (base) | 18.75% | General knowledge questions |
+| Balluff-sensors (fine-tuned) | 37.50% | Product specifications, temperature ranges, distances, IP addresses |
+
+## Contributing
+
+We welcome contributions! Please follow these guidelines:
+
+1. Fork the repo and create your branch from `main`
+2. Add tests for any new functionality
+3. Ensure tests pass and code is properly formatted
+4. Submit a pull request
+
+### Development Process
+- Use [black](https://github.com/psf/black) for code formatting
+- Use [flake8](https://flake8.pycqa.org/) for linting
+- Use [mypy](https://mypy.readthedocs.io/) for type checking
+- Write tests for new features
+- Update documentation for changes
+
+### Data Privacy and Security
+- All contributions must respect Balluff's data privacy policies
+- Do not include sensitive product information in commits
+- Follow Balluff's guidelines for handling product documentation
+- Ensure all data processing follows Balluff's data handling procedures
 
 ## Limitations
 
